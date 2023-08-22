@@ -23,6 +23,7 @@
 [插件开发_gitee](https://gitee.com/ifacker/ToolsKing_Plugin "欢迎大家一起前来开发")
 
 [插件仓库_github](https://github.com/ifacker/ToolsKingPluginLib "欢迎大家一起前来添加")  
-[插件仓库_gitee](https://gitee.com/ifacker/ToolsKingPluginLib "欢迎大家一起前来添加")
+[插件仓库_gitee](https://gitee.com/ifacker/ToolsKingPluginLib "欢迎大家一起前来添加")  
+
 --- 
 最后，如果有不明白的，可以提 issues
