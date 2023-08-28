@@ -17,7 +17,7 @@
 
 ## 版本信息
 v1.3.1
-1. 修复了投资比例、最大掩饰等勾选后无法查询的bug
+1. 修复了投资比例、最大延时等勾选后无法查询的bug
 
 ## 其他链接：
 [ToolsKing_github](https://github.com/ifacker/ToolsKing)  
