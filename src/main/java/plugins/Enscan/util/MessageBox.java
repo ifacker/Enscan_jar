@@ -47,4 +47,15 @@ public class MessageBox {
             alert.showAndWait().ifPresent(action);
         });
     }
+
+    public static void showInformation(String title,String header, String content){
+        Platform.runLater(() -> {
+
+            Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
+            informationAlert.setTitle(title);
+            informationAlert.setHeaderText(header);
+            informationAlert.setContentText(content);
+            informationAlert.showAndWait();
+        });
+    }
 }

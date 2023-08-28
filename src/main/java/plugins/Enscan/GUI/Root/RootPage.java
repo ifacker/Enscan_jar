@@ -7,15 +7,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class RootPage {
 
-    public Node show(){
+    public Node show(Stage primaryStage){
 
         // 顶部
         Tab tabIcp = new Tab("ICP查询");
         tabIcp.setClosable(false);
-        tabIcp.setContent(new IcpSearchPage().show());
+        tabIcp.setContent(new IcpSearchPage().show(primaryStage));
 
 //        Tab tabAdvanced = new Tab("高级查询");
 //        tabAdvanced.setClosable(false);

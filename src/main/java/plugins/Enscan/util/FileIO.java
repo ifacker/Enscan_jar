@@ -1,6 +1,9 @@
 package plugins.Enscan.util;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +17,7 @@ public class FileIO {
      */
     public static String readFile(String path) {
         StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(path)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 content.append(line).append(System.lineSeparator());
@@ -33,7 +36,7 @@ public class FileIO {
      * @param content  要写入的内容
      */
     public static void writeFile(String filePath, String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(filePath)), StandardCharsets.UTF_8))) {
             writer.write(content);
         } catch (IOException e) {
             e.printStackTrace();

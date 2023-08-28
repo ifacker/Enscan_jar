@@ -3,19 +3,20 @@ package plugins.Enscan.GUI.Config;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import plugins.Enscan.Config.GlobalConfig;
+import plugins.Enscan.DataType.ConfigSer;
 import plugins.Enscan.DataType.YamlConfig;
 import plugins.Enscan.util.FileIO;
 import plugins.Enscan.util.JacksonYaml;
 import plugins.Enscan.DataType.CookieLabel;
 import plugins.Enscan.util.S2L;
+import plugins.Enscan.util.Serialize;
 
 import java.util.Map;
 
@@ -24,13 +25,32 @@ public class ConfigPage {
 
 //    private YamlConfig yamlConfig;
 
-    public Node show() {
+    public Node show(Stage primaryStage) {
 
         // 获取配置文件
         loadConfig();
 
         VBox contentVBox = new VBox();
         contentVBox.setSpacing(10);
+
+        VBox vBoxComboBox = new VBox(10);
+        vBoxComboBox.setPadding(new Insets(10));
+
+        // 选择源地址
+        Label label = new Label("选择源：");
+
+        ComboBox<String> comboBox = new ComboBox<>();
+        comboBox.getItems().addAll("gitee", "github");
+        comboBox.setPrefWidth(10000);
+        comboBox.getSelectionModel().select(GlobalConfig.configSer.getSrcMapIndex());
+        comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            GlobalConfig.configSer.setSrcMapIndex(newValue);
+            Serialize.serializeObject(GlobalConfig.configSer, GlobalConfig.AdvancedPath);
+        });
+
+        vBoxComboBox.getChildren().addAll(label, comboBox);
+
+        contentVBox.getChildren().add(vBoxComboBox);
 
         reSet(contentVBox);
 
@@ -147,8 +167,8 @@ public class ConfigPage {
     private void reSet(VBox contentVBox) {
         // output
         if (GlobalConfig.yamlConfig != null) {
-            contentVBox.getChildren().add(labelAndText("默认导出路径：", GlobalConfig.yamlConfig.getCommon().getOutput()));
-            contentVBox.getChildren().add(labelAndText("查询字段，如：[\"website\"]：", GlobalConfig.yamlConfig.getCommon().getField().toString()));
+//            contentVBox.getChildren().add(labelAndText("默认导出路径：", GlobalConfig.yamlConfig.getCommon().getOutput()));
+//            contentVBox.getChildren().add(labelAndText("查询字段，如：[\"website\"]：", GlobalConfig.yamlConfig.getCommon().getField().toString()));
 
 
             // 遍历 cookie

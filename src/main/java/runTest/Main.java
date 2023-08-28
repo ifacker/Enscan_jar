@@ -19,7 +19,7 @@ public class Main extends Application {
 
         // 将选项卡面板添加到主容器的中心位置
         plugins.Enscan.Main test = new plugins.Enscan.Main();
-        root.setCenter(test.getContent());
+        root.setCenter(test.getContent(primaryStage));
 
         // 创建场景并将主容器添加到场景中
         Scene scene = new Scene(root, 700, 550);

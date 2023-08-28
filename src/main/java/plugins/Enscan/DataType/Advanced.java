@@ -6,6 +6,7 @@ public class Advanced implements Serializable {
     private boolean status;
     private CookieLabel cookieLabel;
     private String value;
+    private String name;
 
     public String getName() {
         return name;
@@ -15,7 +16,6 @@ public class Advanced implements Serializable {
         this.name = name;
     }
 
-    private String name;
 
     public boolean getStatus() {
         return status;

@@ -2,6 +2,7 @@ package Plugin;
 
 
 import javafx.scene.Node;
+import javafx.stage.Stage;
 
 // 插件接口
 public interface Plugin {
@@ -10,5 +11,5 @@ public interface Plugin {
     String getName();
 
     // 获取插件内容
-    Node getContent();
+    Node getContent(Stage primaryStage);
 }

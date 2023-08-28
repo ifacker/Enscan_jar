@@ -3,6 +3,7 @@ package plugins.Enscan.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class Cmd {
 
@@ -18,7 +19,7 @@ public class Cmd {
             // 启动进程
             Process process = null;
             process = processBuilder.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
