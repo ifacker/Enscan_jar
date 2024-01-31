@@ -27,7 +27,7 @@ public class GlobalConfig {
     // 配置文件路径
     public static String[] configPath = {
             "config",
-            "config/config.ser"
+            "config/config.json"
     };
 
     // 插件路径

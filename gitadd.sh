@@ -5,8 +5,8 @@ version="v1.3.3"
 git add .
 git commit -m "update $version"
 git push github
-git push gitee
+#git push gitee
 
 git tag $version
 git push github --tags
-git push gitee --tags
+#git push gitee --tags
