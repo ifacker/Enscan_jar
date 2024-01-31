@@ -12,8 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import plugins.Enscan.Config.GlobalConfig;
+import plugins.Enscan.Control.Exe;
 import plugins.Enscan.DataType.*;
 import plugins.Enscan.DataType.result.Website;
+import plugins.Enscan.GUI.Config.ConfigPage;
 import plugins.Enscan.util.*;
 
 import java.io.File;
@@ -61,7 +63,14 @@ public class IcpSearchPage {
 
         Spinner<Integer> spinner = new Spinner<>(min, max, def, step);
         spinner.setPrefWidth(75);
-        advanceds.get(title).setValue(Integer.toString(def));
+        if (advanceds.get(title) != null) {
+            advanceds.get(title).setValue(Integer.toString(def));
+        } else {
+            Advanced advanced = new Advanced();
+            advanced.setName(title);
+            advanced.setValue(Integer.toString(def));
+            advanceds.put(title, advanced);
+        }
         spinner.valueProperty().addListener((observable, oldValue, newValue) -> {
             advanceds.get(title).setValue(Integer.toString(newValue));
             GlobalConfig.configSer.setAdvanceds(advanceds);
@@ -173,28 +182,7 @@ public class IcpSearchPage {
         return vBox;
     }
 
-    // 根据对应系统，下载 enscan
-    private void downloadEnscan(String enscanName) {
-        if (!new File(GlobalConfig.ExecPath + enscanName).isFile()) {
-            Map<String, String> downloadMap = new HashMap<>();
-            switch (GlobalConfig.configSer.getSrcMapIndex()) {
-                case "gitee":
-                    downloadMap = GlobalConfig.giteeSrcMap;
-                    break;
-                case "github":
-                    downloadMap = GlobalConfig.githubSrcMap;
-            }
-            MessageBox.showInformation("插件暂未下载", "正在下载插件", "请稍后...");
-            if (!Download.DownloadFile(downloadMap.get(enscanName),
-                    GlobalConfig.ExecPath + enscanName)) {
-                MessageBox.showErrorAlert("error", "文件下载失败，可能是超时导致，请确认网络链接是否有效，或者在配置中切换下载源地址");
-                return;
-            }
-            if (!System.getProperty("os.name").contains("win")) {
-                Cmd.run("chmod +x " + GlobalConfig.ExecPath + enscanName);
-            }
-        }
-    }
+
 
     // 搜索
     private void search() {
@@ -279,7 +267,6 @@ public class IcpSearchPage {
                     break;
                 case "投资比例":
                     if (advanced.getStatus()) {
-                        System.out.println(advanced.getValue());
                         invest = " -invest " + advanced.getValue();
                     }
                     break;
@@ -313,42 +300,8 @@ public class IcpSearchPage {
         // 去掉最后一位上的逗号
         type = type.replaceAll(",+$", "");
 
-        // 获取系统信息和架构信息
-        String os = System.getProperty("os.name").toLowerCase();
-        String arch = System.getProperty("os.arch").toLowerCase();
+        String enscanName = new Exe().scanEnscan();
 
-        String enscanName = "";
-        if (os.contains("mac")) {
-            if (arch.contains("x86_64")) {
-                enscanName = "enscan-0.0.15-darwin-amd64";
-                downloadEnscan(enscanName);
-            } else if (arch.contains("arm64")) {
-                enscanName = "enscan-0.0.15-darwin-arm64";
-                downloadEnscan(enscanName);
-            }
-        } else if (os.contains("win")) {
-            if (arch.contains("amd64")) {
-                enscanName = "enscan-0.0.15-windows-amd64.exe";
-                downloadEnscan(enscanName);
-            }
-        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
-            if (arch.contains("amd64")) {
-                enscanName = "enscan-0.0.15-linux-amd64";
-                downloadEnscan(enscanName);
-            } else if (arch.contains("arm64")) {
-                enscanName = "enscan-0.0.15-linux-arm64";
-                downloadEnscan(enscanName);
-            } else if (arch.contains("arm")) {
-                enscanName = "enscan-0.0.15-linux-arm";
-                downloadEnscan(enscanName);
-            } else if (arch.contains("386")) {
-                enscanName = "enscan-0.0.15-linux-386";
-                downloadEnscan(enscanName);
-            }
-
-        } else {
-            MessageBox.showErrorAlert("error", "对不起，暂不支持您的系统架构！");
-        }
         // 组装命令
         String cmd = GlobalConfig.ExecPath + enscanName + " -json -field icp -type " + type + " -o " + GlobalConfig.JsonPath +
                 " -f " + GlobalConfig.JsonPath + "input.txt" + supplier + isGroup + hold + invest + delay + deep + isBranch + timeout + uncertainInvest;
@@ -397,7 +350,6 @@ public class IcpSearchPage {
 
     // 查询导出至xlsx
     private void searchAndOutput() {
-
 
 
         // 删除文件夹里的所有文件
@@ -513,42 +465,8 @@ public class IcpSearchPage {
         // 去掉最后一位上的逗号
         type = type.replaceAll(",+$", "");
 
-        // 获取系统信息和架构信息
-        String os = System.getProperty("os.name").toLowerCase();
-        String arch = System.getProperty("os.arch").toLowerCase();
+        String enscanName = new Exe().scanEnscan();
 
-        String enscanName = "";
-        if (os.contains("mac")) {
-            if (arch.contains("x86_64")) {
-                enscanName = "enscan-0.0.15-darwin-amd64";
-                downloadEnscan(enscanName);
-            } else if (arch.contains("arm64")) {
-                enscanName = "enscan-0.0.15-darwin-arm64";
-                downloadEnscan(enscanName);
-            }
-        } else if (os.contains("win")) {
-            if (arch.contains("amd64")) {
-                enscanName = "enscan-0.0.15-windows-amd64.exe";
-                downloadEnscan(enscanName);
-            }
-        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
-            if (arch.contains("amd64")) {
-                enscanName = "enscan-0.0.15-linux-amd64";
-                downloadEnscan(enscanName);
-            } else if (arch.contains("arm64")) {
-                enscanName = "enscan-0.0.15-linux-arm64";
-                downloadEnscan(enscanName);
-            } else if (arch.contains("arm")) {
-                enscanName = "enscan-0.0.15-linux-arm";
-                downloadEnscan(enscanName);
-            } else if (arch.contains("386")) {
-                enscanName = "enscan-0.0.15-linux-386";
-                downloadEnscan(enscanName);
-            }
-
-        } else {
-            MessageBox.showErrorAlert("error", "对不起，暂不支持您的系统架构！");
-        }
         // 组装命令
         String cmd = GlobalConfig.ExecPath + enscanName + " -field icp -type " + type + " -o " + GlobalConfig.configSer.getOutputPath() +
                 " -f " + GlobalConfig.JsonPath + "input.txt" + supplier + isGroup + hold + invest + delay + deep + isBranch + timeout + uncertainInvest;
@@ -582,16 +500,18 @@ public class IcpSearchPage {
         // 高级设置
         TitledPane titledPane = new TitledPane("高级选项", advancedContent());
         titledPane.setCollapsible(true); // 允许崩溃
-        titledPane.setExpanded(false);     // 设置最初扩展
+        titledPane.setExpanded(false);     // 设置默认是否展开
 
         // 中部内容
         // 输入框
 //        textAreaInput = new TextArea();
         textAreaInput.setPromptText("请输入需要信息收集的公司名，如：小米");
+        textAreaInput.setPrefHeight(10000);
 
         // 输出框
 //        textAreaOutput = new TextArea();
         textAreaOutput.setEditable(false);
+        textAreaOutput.setPrefHeight(10000);
 
         HBox hBoxTextArea = new HBox(10);
         hBoxTextArea.setPadding(new Insets(10, 10, 0, 10));
@@ -604,7 +524,7 @@ public class IcpSearchPage {
         progressBar.setPrefSize(30, 30);
 
         // 底部按钮
-        Button buttonStartAndOutput = new Button("查询导出至xlsx");
+        Button buttonStartAndOutput = new Button("查询导出至 xlsx");
         buttonStartAndOutput.setOnAction(event -> {
 
             if ("".equals(textAreaInput.getText())) {
@@ -624,7 +544,9 @@ public class IcpSearchPage {
                 // 保存路径
                 GlobalConfig.configSer.setOutputPath(selectedDirectory.getPath());
                 Serialize.serializeObject(GlobalConfig.configSer, GlobalConfig.AdvancedPath);
-                System.out.printf(selectedDirectory.getPath());
+//                System.out.printf(selectedDirectory.getPath());
+            } else {
+                return;
             }
 
             Platform.runLater(() -> {
@@ -637,6 +559,7 @@ public class IcpSearchPage {
         });
 
         Button buttonStart = new Button("查询");
+        buttonStart.setPrefWidth(150);
         buttonStart.setOnAction(event -> {
             Platform.runLater(() -> {
 

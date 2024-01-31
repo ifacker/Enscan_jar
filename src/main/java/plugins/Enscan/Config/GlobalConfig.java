@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GlobalConfig {
+    public static String Version = "v1.3.3";
+    public static String Enscan_Version = "v0.0.15";
 
     public static YamlConfig yamlConfig;
 

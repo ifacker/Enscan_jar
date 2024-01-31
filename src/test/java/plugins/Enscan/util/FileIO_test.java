@@ -13,11 +13,28 @@ public class FileIO_test {
 //
 //        YamlConfig yamlConfig = JacksonYaml.unSerialization(content);
 //        System.out.println();
-        getJsonFileNames_test();
+
+
+//        getJsonFileNames_test();
+
+//            createFolder_test();
+
+        writeFile_test();
 
     }
 
     private static void getJsonFileNames_test(){
         FileIO.getJsonFileNames(new File(GlobalConfig.JsonPath));
     }
+
+    private static void createFolder_test(){
+        FileIO.createFolders("a/d/f/g/vc/");
+    }
+
+    private static void writeFile_test(){
+        FileIO.writeFile("exec/outs/a/a/a/a/input_test.txt", "test");
+    }
+
 }
+
+

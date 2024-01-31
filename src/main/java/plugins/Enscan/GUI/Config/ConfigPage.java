@@ -10,6 +10,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import plugins.Enscan.Config.GlobalConfig;
+import plugins.Enscan.Control.Exe;
+import plugins.Enscan.DataType.Common;
 import plugins.Enscan.DataType.ConfigSer;
 import plugins.Enscan.DataType.YamlConfig;
 import plugins.Enscan.util.FileIO;
@@ -18,6 +20,10 @@ import plugins.Enscan.DataType.CookieLabel;
 import plugins.Enscan.util.S2L;
 import plugins.Enscan.util.Serialize;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -74,10 +80,11 @@ public class ConfigPage {
         hBox.getChildren().addAll(buttonReset, buttonSave);
 
         // 显示版本号
-        Label labelVersion = null;
-        if (GlobalConfig.yamlConfig != null) {
-            labelVersion = new Label("Version: " + GlobalConfig.yamlConfig.getVersion());
+        Label labelVersion = new Label();
+        if (GlobalConfig.yamlConfig != null ){
+            labelVersion.setText("Version: " + GlobalConfig.yamlConfig.getVersion());
         }
+
         HBox hBoxVersion = new HBox(10);
         hBoxVersion.setAlignment(Pos.CENTER_LEFT);
         hBoxVersion.setPadding(new Insets(10));
@@ -161,7 +168,32 @@ public class ConfigPage {
     }
 
     private void loadConfig() {
-        GlobalConfig.yamlConfig = JacksonYaml.unSerialization(FileIO.readFile(GlobalConfig.ConfigPath));
+        if (Files.exists(Paths.get(GlobalConfig.ConfigPath))){
+            GlobalConfig.yamlConfig = JacksonYaml.unSerialization(FileIO.readFile(GlobalConfig.ConfigPath));
+        } else {
+
+            Common common = new Common();
+            common.setField(null);
+            common.setOutput("");
+
+            Map<String, String> cookies = new HashMap<>();
+            cookies.put("veryvp", "");
+            cookies.put("chinaz", "");
+            cookies.put("qimai", "");
+            cookies.put("aldzs", "");
+            cookies.put("tycid", "");
+            cookies.put("tianyancha", "");
+            cookies.put("aiqicha", "");
+
+            YamlConfig yamlConfig = new YamlConfig();
+            yamlConfig.setVersion(0.4);
+            yamlConfig.setCommon(common);
+            yamlConfig.setCookies(cookies);
+
+            String yamlStr = JacksonYaml.serialization(yamlConfig);
+            FileIO.writeFile(GlobalConfig.ConfigPath, yamlStr);
+            loadConfig();
+        }
     }
 
     private void reSet(VBox contentVBox) {

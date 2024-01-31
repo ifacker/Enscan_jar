@@ -39,7 +39,7 @@
                     <archive>
                         <manifest>
                             <!-- 这里放置插件的入口函数，注意修改包名，其他的不用动 -->
-                            <mainClass>plugins.Enscan.Main</mainClass>
+                            <mainClass>runTest.Main</mainClass>
                         </manifest>
                     </archive>
                     <!-- 这个jar-with-dependencies是这个插件中预置的，不用管它，尽管用就好了 -->
@@ -77,6 +77,11 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
             <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
         </dependency>
     </dependencies>
 

@@ -3,7 +3,7 @@ package plugins.Enscan.DataType;
 import java.util.Map;
 
 public class YamlConfig {
-    private double version;
+    private double version ;
 
     private Common common;
 

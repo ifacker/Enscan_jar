@@ -15,7 +15,7 @@ public class Main extends Application {
         BorderPane root = new BorderPane();
 
         // 加载配置文件
-        GlobalConfig.configTypeNow = new SaveConfig().load(GlobalConfig.configPath[1]);
+        GlobalConfig.configTypeNow = new SaveConfig().load4Json(GlobalConfig.configPath[1]);
 
         // 将选项卡面板添加到主容器的中心位置
         plugins.Enscan.Main test = new plugins.Enscan.Main();

@@ -1,4 +1,4 @@
-package plugins.Enscan.util;
+package util;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -106,6 +106,16 @@ public class FileIO {
 //        else {
 //            System.out.println("文件夹已经存在。");
 //        }
+    }
+
+
+    /**
+     * 判断文件是否存在
+     * @param path 文件路径
+     * @return 返回是否存在
+     */
+    public static Boolean isFile(String path){
+        return new File(path).exists();
     }
 
 }

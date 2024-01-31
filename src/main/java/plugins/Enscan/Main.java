@@ -6,11 +6,20 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import plugins.Enscan.Config.GlobalConfig;
+import plugins.Enscan.GUI.About.About;
 import plugins.Enscan.GUI.Config.ConfigPage;
 import plugins.Enscan.GUI.Root.RootPage;
+import plugins.Enscan.util.FileIO;
 
 
 public class Main implements Plugin {
+
+    // 初始化目录
+    private void init(){
+        FileIO.createFolders(GlobalConfig.JsonPath);
+    }
+
     @Override
     public String getName() {
         return "Enscan";
@@ -18,6 +27,10 @@ public class Main implements Plugin {
 
     @Override
     public Node getContent(Stage primaryStage) {
+
+        // 初始化目录
+        init();
+
         // 创建插件的内容
         VBox content = new VBox(10);
 
@@ -36,6 +49,11 @@ public class Main implements Plugin {
         tabConfig.setClosable(false);
         tabConfig.setContent(new ConfigPage().show(primaryStage));
 
+        // about 页面
+        Tab tabAbout = new Tab("关于");
+        tabAbout.setClosable(false);
+        tabAbout.setContent(new About().show(primaryStage));
+
         // 命令行 tab
 //        Tab tabCmd = new Tab("命令行操作");
 //        tabCmd.setClosable(false);
@@ -43,7 +61,7 @@ public class Main implements Plugin {
 
 //        tabPane.getTabs().addAll(tabRoot, tabCmd);
 
-        tabPane.getTabs().addAll(tabRoot, tabConfig);
+        tabPane.getTabs().addAll(tabRoot, tabConfig, tabAbout);
 
         content.getChildren().addAll(tabPane);
 
